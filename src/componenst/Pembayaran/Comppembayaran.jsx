@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Offcanvas from "react-bootstrap/Offcanvas";
+import { imageDb } from "../../firebase";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 export default function Comppembayaran({
   totalharga,
@@ -9,6 +11,7 @@ export default function Comppembayaran({
   jammulai,
   jamberakhir,
   lapangan,
+  idlapangan,
 }) {
   const urlapi = process.env.REACT_APP_BASE_URL;
   const [wasit, setWasit] = useState(false);
@@ -26,9 +29,107 @@ export default function Comppembayaran({
   const [hargapoto, setHargapoto] = useState(0);
   const [bagiharga, setBagiharga] = useState("lunas");
 
+  const [nameImg, setNameImg] = useState("");
+  const [valueimg, setvalueimg] = useState("");
+  const [img, setImg] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [form, setForm] = useState(true);
+  const [sukses, setSukses] = useState(false);
+
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const [dp, setDp] = useState("Lunas");
+  const [atasnama, setAtasnama] = useState("");
+  const [wa, setWa] = useState("");
+  const [team, setTeam] = useState("");
+  const [bank, setBank] = useState("");
+  const [uang, setUang] = useState("");
+  const [ket, setKet] = useState("");
+  const [valwasit, setValwasit] = useState("");
+  const [valrompi, setValrompi] = useState("");
+  const [valbola, setValbola] = useState("");
+  const [valpoto, setValpoto] = useState("");
+
+  const handleChangeImg = (e) => {
+    setImg(e.target.files[0]);
+    console.log(e);
+    setvalueimg(e.target.value);
+    setNameImg(e.target.files[0].name);
+  };
+
+  const handleBooking = () => {
+    setForm(false);
+    setLoading(true);
+    const imgRef = ref(imageDb, `files/${nameImg}`);
+    uploadBytes(imgRef, img);
+    console.log(imgRef._location.path_);
+
+    setTimeout(() => {
+      getDownloadURL(ref(imageDb, `files/${nameImg}`)).then((url) => {
+        console.log("prosess");
+
+        addbooking(url);
+      });
+    }, 15000);
+  };
+
+  const addbooking = async (url) => {
+    await axios
+      .post(urlapi + "Addbooking2", {
+        nama: localStorage.getItem("nama"),
+        iduser: localStorage.getItem("id"),
+        lapangan: lapangan,
+        idlapangan: idlapangan,
+        tgl: tglbooking,
+        harga: totalharga,
+        total_harga: totalhargasemua,
+        team: team,
+        jam_mulai: jammulai,
+        jam_berakhir: jamberakhir,
+        bank: bank,
+        uang: uang,
+        atasnama: atasnama,
+        wa: wa,
+        dp: dp,
+        ket: ket,
+        bukti: url,
+        wasit: valwasit,
+        bola: valbola,
+        rompi: valrompi,
+        poto: valpoto,
+      })
+
+      .then((response) => {
+        console.log(response.data);
+        // sendwa(response.data.kode_booking);
+        if (response.data.message == true) {
+          setLoading(false);
+          setSukses(true);
+        }
+      })
+      .catch((error) => {
+        // console.log(error.message);
+      });
+  };
+
+  const handlewasit = (harga, id) => {
+    setHargawasit(harga);
+    setValwasit(id);
+  };
+  const handlebola = (harga, id) => {
+    setHargabola(harga);
+    setValbola(id);
+  };
+  const handlerompi = (harga, id) => {
+    setHargarompi(harga);
+    setValrompi(id);
+  };
+  const handlepoto = (harga, id) => {
+    setHargapoto(harga);
+    setValpoto(id);
+  };
 
   const totalhargasemua =
     parseInt(totalharga) +
@@ -44,8 +145,18 @@ export default function Comppembayaran({
     return rupiah;
   };
 
+  const date = new Date();
+  let tgl = new Date();
+  let tgl_sekarang =
+    tgl.getFullYear() +
+    "-" +
+    ("0" + (date.getMonth() + 1)).slice(-2) +
+    "-" +
+    ("0" + tgl.getDate()).slice(-2);
+
   const handlebagi = (e) => {
     setBagiharga(e);
+    setDp(e);
   };
   const getwasit = async () => {
     try {
@@ -83,7 +194,7 @@ export default function Comppembayaran({
     <div>
       <div
         className="card shadow"
-        style={{ border: "none", marginTop: "70px" }}
+        style={{ border: "none", marginTop: "30px" }}
       >
         <div className="card-body">
           <p>
@@ -157,24 +268,36 @@ export default function Comppembayaran({
 
           <div className={wasit ? "" : "d-none"}>
             <hr />
-            {datawasit.map((ws, index) => {
-              return (
-                <div className="d-flex justify-content-between" key={index}>
-                  <p>{ws.lisensi}</p>
-                  <p>
-                    +{ws.harga}{" "}
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="ws"
-                      id="ws"
-                      value={ws.harga}
-                      onClick={() => setHargawasit(ws.harga)}
-                    ></input>
-                  </p>
-                </div>
-              );
-            })}
+            {tgl_sekarang == tglbooking ? (
+              <>
+                <p className="text-danger text-center">
+                  Fitur ini tidak dapat dipilih, minimal H-1 sebelum tanggal
+                  reservasi
+                </p>
+              </>
+            ) : (
+              <>
+                {" "}
+                {datawasit.map((ws, index) => {
+                  return (
+                    <div className="d-flex justify-content-between" key={index}>
+                      <p>{ws.lisensi}</p>
+                      <p>
+                        +{formatrupiah(ws.harga)}{" "}
+                        <input
+                          className="form-check-input border-primary"
+                          type="radio"
+                          name="ws"
+                          id="ws"
+                          value={ws.id}
+                          onClick={() => handlewasit(ws.harga, ws.id)}
+                        ></input>
+                      </p>
+                    </div>
+                  );
+                })}
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -210,14 +333,14 @@ export default function Comppembayaran({
                     {bl.bola} - {bl.grade}
                   </p>
                   <p>
-                    +{bl.harga}{" "}
+                    +{formatrupiah(bl.harga)}{" "}
                     <input
-                      className="form-check-input"
+                      className="form-check-input border-primary"
                       type="radio"
                       name="bola"
                       id="bola"
-                      value={bl.harga}
-                      onClick={() => setHargabola(bl.harga)}
+                      value={bl.id}
+                      onClick={() => handlebola(bl.harga, bl.id)}
                     ></input>
                   </p>
                 </div>
@@ -258,14 +381,14 @@ export default function Comppembayaran({
                     {rm.rompi} - {rm.grade}
                   </p>
                   <p>
-                    +{rm.harga}{" "}
+                    +{formatrupiah(rm.harga)}{" "}
                     <input
-                      className="form-check-input"
+                      className="form-check-input border-primary"
                       type="radio"
                       name="rompi"
                       id="rompi"
-                      value={rm.harga}
-                      onClick={() => setHargarompi(rm.harga)}
+                      value={rm.id}
+                      onClick={() => handlerompi(rm.harga, rm.id)}
                     ></input>
                   </p>
                 </div>
@@ -300,24 +423,36 @@ export default function Comppembayaran({
 
           <div className={poto ? "" : "d-none"}>
             <hr />
-            {datapoto.map((pt, index) => {
-              return (
-                <div className="d-flex justify-content-between" key={index}>
-                  <p>{pt.nama}</p>
-                  <p>
-                    +{pt.harga}{" "}
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="poto"
-                      id="poto"
-                      value={pt.harga}
-                      onClick={() => setHargapoto(pt.harga)}
-                    ></input>
-                  </p>
-                </div>
-              );
-            })}
+            {tgl_sekarang == tglbooking ? (
+              <>
+                {" "}
+                <p className="text-danger text-center">
+                  Fitur ini tidak dapat dipilih, minimal H-1 sebelum tanggal
+                  reservasi
+                </p>
+              </>
+            ) : (
+              <>
+                {datapoto.map((pt, index) => {
+                  return (
+                    <div className="d-flex justify-content-between" key={index}>
+                      <p>{pt.nama}</p>
+                      <p>
+                        +{formatrupiah(pt.harga)}{" "}
+                        <input
+                          className="form-check-input border-primary"
+                          type="radio"
+                          name="poto"
+                          id="poto"
+                          value={pt.id}
+                          onClick={() => handlepoto(pt.harga, pt.id)}
+                        ></input>
+                      </p>
+                    </div>
+                  );
+                })}
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -356,24 +491,77 @@ export default function Comppembayaran({
                     </div>
                   </Offcanvas.Header>
                   <Offcanvas.Body>
-                    <div className="container">
+                    {/* loading */}
+                    <div id="loading" className={loading ? "" : "d-none"}>
+                      <div
+                        className="text-center"
+                        style={{ marginTop: "130px" }}
+                      >
+                        <div class="spinner-grow text-primary" role="status">
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <div class="spinner-grow text-secondary" role="status">
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <div class="spinner-grow text-success" role="status">
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <br></br>
+                        <label>Loading....</label>
+                        <p className="text-center">
+                          Mohon untuk menunggu proses pembayaran
+                        </p>
+                      </div>
+                    </div>
+                    {/* end */}
+
+                    {/* alertsukses */}
+                    <div className={sukses ? "container" : "d-none"}>
+                      <center>
+                        <img
+                          src="/sukses.png"
+                          className="img-fluid"
+                          alt=""
+                          style={{ height: "100px" }}
+                        ></img>
+                        <h5 className="mt-4 text-secondary">
+                          <strong>Hei, {localStorage.getItem("nama")} </strong>
+                          <br></br>
+                          Pembayaran anda berhasil dikirim silahkan menunggu
+                          persetujuan pembayaran anda
+                        </h5>
+                        <a
+                          href={"/formbooking/" + idlapangan}
+                          className="btn mt-3"
+                          style={{
+                            backgroundColor: "#2b2e5a",
+                            color: "white",
+                          }}
+                        >
+                          Tutup popup
+                        </a>
+                      </center>
+                    </div>
+                    {/* end */}
+
+                    <div className={form ? "container" : "d-none"}>
                       <div class="form-check form-check-inline">
                         <input
-                          class="form-check-input"
+                          class="form-check-input border-primary"
                           type="radio"
                           name="inlineRadioOptions"
                           onClick={() => handlebagi("lunas")}
                           id="lunas"
                           value="Lunas"
-                          checked
                         />
+
                         <label class="form-check-label" for="inlineRadio1">
                           Lunas
                         </label>
                       </div>
                       <div class="form-check form-check-inline">
                         <input
-                          class="form-check-input"
+                          class="form-check-input border-primary"
                           type="radio"
                           name="inlineRadioOptions"
                           onClick={() => handlebagi("dp")}
@@ -381,14 +569,14 @@ export default function Comppembayaran({
                           value="DP"
                         />
                         <label class="form-check-label" for="inlineRadio2">
-                          DP
+                          DP 50%
                         </label>
                       </div>
                       <div className="row">
                         <div class="row">
                           <div class="form-group col-md-6 mt-3">
                             <input
-                              type="number"
+                              type="text"
                               className="form-control"
                               value={
                                 bagiharga == "lunas"
@@ -398,7 +586,10 @@ export default function Comppembayaran({
                             ></input>
                           </div>
                           <div class="form-group col-md-6 mt-3">
-                            <select className="form-control">
+                            <select
+                              className="form-control"
+                              onChange={(e) => setBank(e.target.value)}
+                            >
                               <option value="Lainya">
                                 -- Pilih Bank Anda --
                               </option>
@@ -418,6 +609,7 @@ export default function Comppembayaran({
                               type="text"
                               class="form-control"
                               id="inputEmail4"
+                              onChange={(e) => setAtasnama(e.target.value)}
                               placeholder="Atas nama"
                             />
                           </div>
@@ -427,12 +619,23 @@ export default function Comppembayaran({
                               type="number"
                               class="form-control"
                               id="inputEmail4"
+                              onChange={(e) => setWa(e.target.value)}
                               placeholder="Nomor whatsapp"
                             />
                           </div>
                           <div class="form-group col-md-6 mt-3">
                             <input
+                              type="text"
+                              class="form-control"
+                              id=""
+                              onChange={(e) => setTeam(e.target.value)}
+                              placeholder="Nama team"
+                            />
+                          </div>
+                          <div class="form-group col-md-6 mt-3">
+                            <input
                               type="file"
+                              onChange={(e) => handleChangeImg(e)}
                               class="form-control"
                               id="inputEmail4"
                             />
@@ -445,17 +648,38 @@ export default function Comppembayaran({
                             <textarea
                               className="form-control"
                               name="keterangan"
-                              placeholder="Keterangan"
+                              onChange={(e) => setKet(e.target.value)}
+                              placeholder="Keterangan (opsional)"
                             ></textarea>
                           </div>
                         </div>
-                        <Button
-                          variant="btn rounded-pill fw-100 mt-4"
-                          onClick={handleShow}
-                          style={{ backgroundColor: "#2b2e5a", color: "white" }}
-                        >
-                          Bayar sekarang
-                        </Button>
+                        {team == "" ||
+                        wa == "" ||
+                        atasnama == "" ||
+                        bank == "" ||
+                        img == "" ? (
+                          <Button
+                            variant="btn rounded-pill fw-100 mt-4"
+                            disabled
+                            style={{
+                              backgroundColor: "#2b2e5a",
+                              color: "white",
+                            }}
+                          >
+                            Bayar sekarang
+                          </Button>
+                        ) : (
+                          <Button
+                            variant="btn rounded-pill fw-100 mt-4"
+                            onClick={() => handleBooking()}
+                            style={{
+                              backgroundColor: "#2b2e5a",
+                              color: "white",
+                            }}
+                          >
+                            Bayar sekarang
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </Offcanvas.Body>

@@ -72,7 +72,7 @@ export default function Formbooking() {
     });
 
   const alertJamkosong = () =>
-    toast.error("jam booking harus di pilih !", {
+    toast.error("Jam booking harus di pilih !", {
       position: toast.POSITION.BOTTOM_CENTER,
     });
 
@@ -470,13 +470,21 @@ export default function Formbooking() {
                               </div>
                             </div>
                             <div className="d-flex justify-content-between">
-                              <div>
+                              <div
+                                className={
+                                  jm.harga_diskon == jm.harga ? "d-none" : ""
+                                }
+                              >
                                 <small className="fw-bold text-secondary">
                                   <s>{formatrupiah(jm.harga)}</s>
                                 </small>{" "}
                               </div>
 
-                              <div>
+                              <div
+                                className={
+                                  jm.harga_diskon == jm.harga ? "d-none" : ""
+                                }
+                              >
                                 <span
                                   className={
                                     jm.time == "Promo"
@@ -496,7 +504,9 @@ export default function Formbooking() {
                                 {formatrupiah(jm.harga_diskon)}
                               </span>{" "}
                               <span className="badge text-bg-dark fw-bold">
-                                SOFT OPENING
+                                {jm.harga == jm.harga_diskon
+                                  ? "TERSEDIA"
+                                  : "SOFT OPENING"}
                               </span>{" "}
                             </div>
                           </div>
@@ -511,25 +521,44 @@ export default function Formbooking() {
             <Loadjambooking />
           )}
           <div className="container my-5">
-            <div class="fixed-bottom mt-5">
+            <div className="fixed-bottom mt-5 ">
               <div
-                className="card"
+                className="card shadow"
                 style={{ borderRadius: "0px", border: "0" }}
               >
                 <div className="card-boyd">
-                  <div class="d-flex justify-content-around my-3">
+                  <div className="d-flex justify-content-around my-3">
                     <div>
-                      <p className="fw-bold">Total : Rp. {totalHarga}</p>
+                      {totalHarga == "" ? (
+                        <p className="fw-bold">Total : Rp.0</p>
+                      ) : (
+                        <p className="fw-bold">
+                          {hiddenbutton == false ? (
+                            "Total : Rp.0"
+                          ) : (
+                            <>Total : {formatrupiah(totalHarga)}</>
+                          )}
+                        </p>
+                      )}
                     </div>
                     {idjambooking == "" ? (
                       <Link
-                        className="btn btn-primary"
+                        className="btn btn-primary rounded-pill"
                         onClick={alertJamkosong}
+                        style={{ backgroundColor: "#2b2e5a", color: "white" }}
                       >
                         Selanjutnya
                       </Link>
                     ) : (
-                      <Link className="btn btn-primary" onClick={handlePaga}>
+                      <Link
+                        className={
+                          hiddenbutton == false
+                            ? "btn btn-primary rounded-pill disabled"
+                            : "btn btn-primary rounded-pill"
+                        }
+                        onClick={handlePaga}
+                        style={{ backgroundColor: "#2b2e5a", color: "white" }}
+                      >
                         Selanjutnya
                       </Link>
                     )}
@@ -539,6 +568,8 @@ export default function Formbooking() {
             </div>
           </div>
         </div>
+        <br></br>
+        <br></br>
         <div className={pagebayar ? "" : "d-none"}>
           <Comppembayaran
             tglbooking={tglsrc}
@@ -547,6 +578,7 @@ export default function Formbooking() {
             jammulai={jammulai}
             jamberakhir={jamberakhir}
             lapangan={namaLapangan}
+            idlapangan={idlapangan}
           />
         </div>
 
