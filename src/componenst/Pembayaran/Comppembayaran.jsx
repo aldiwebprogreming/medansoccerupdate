@@ -115,20 +115,40 @@ export default function Comppembayaran({
   };
 
   const handlewasit = (harga, id) => {
-    setHargawasit(harga);
-    setValwasit(id);
+    if (harga == 0) {
+      setValwasit("");
+      setHargawasit(harga);
+    } else {
+      setHargawasit(harga);
+      setValwasit(id);
+    }
   };
   const handlebola = (harga, id) => {
-    setHargabola(harga);
-    setValbola(id);
+    if (harga == 0) {
+      setHargabola(harga);
+      setValbola("");
+    } else {
+      setHargabola(harga);
+      setValbola(id);
+    }
   };
   const handlerompi = (harga, id) => {
-    setHargarompi(harga);
-    setValrompi(id);
+    if (harga == 0) {
+      setHargarompi(harga);
+      setValrompi("");
+    } else {
+      setHargarompi(harga);
+      setValrompi(id);
+    }
   };
   const handlepoto = (harga, id) => {
-    setHargapoto(harga);
-    setValpoto(id);
+    if (harga == 0) {
+      setHargapoto(harga);
+      setValpoto("");
+    } else {
+      setHargapoto(harga);
+      setValpoto(id);
+    }
   };
 
   const totalhargasemua =
@@ -261,6 +281,13 @@ export default function Comppembayaran({
             </p>
             <div>
               <i
+                className={
+                  valwasit == ""
+                    ? "d-none"
+                    : "fas fa-circle-check text-primary mx-3"
+                }
+              ></i>
+              <i
                 className={wasit ? "fas fa-angle-down" : "fas fa-angle-right"}
               ></i>
             </div>
@@ -268,36 +295,39 @@ export default function Comppembayaran({
 
           <div className={wasit ? "" : "d-none"}>
             <hr />
-            {tgl_sekarang == tglbooking ? (
-              <>
-                <p className="text-danger text-center">
-                  Fitur ini tidak dapat dipilih, minimal H-1 sebelum tanggal
-                  reservasi
-                </p>
-              </>
-            ) : (
-              <>
-                {" "}
-                {datawasit.map((ws, index) => {
-                  return (
-                    <div className="d-flex justify-content-between" key={index}>
-                      <p>{ws.lisensi}</p>
-                      <p>
-                        +{formatrupiah(ws.harga)}{" "}
-                        <input
-                          className="form-check-input border-primary"
-                          type="radio"
-                          name="ws"
-                          id="ws"
-                          value={ws.id}
-                          onClick={() => handlewasit(ws.harga, ws.id)}
-                        ></input>
-                      </p>
-                    </div>
-                  );
-                })}
-              </>
-            )}
+
+            {datawasit.map((ws, index) => {
+              return (
+                <div className="d-flex justify-content-between" key={index}>
+                  <p>{ws.lisensi}</p>
+                  <p>
+                    +{formatrupiah(ws.harga)}{" "}
+                    <input
+                      className="form-check-input border-primary"
+                      type="radio"
+                      name="ws"
+                      id="ws"
+                      value={ws.id}
+                      onClick={() => handlewasit(ws.harga, ws.id)}
+                    ></input>
+                  </p>
+                </div>
+              );
+            })}
+
+            <div className="d-flex justify-content-between">
+              <p>Tanpa wasit</p>
+              <p>
+                +{formatrupiah(0)}{" "}
+                <input
+                  className="form-check-input border-primary"
+                  type="radio"
+                  name="ws"
+                  id="ws"
+                  onClick={() => handlewasit(0)}
+                ></input>
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -318,6 +348,13 @@ export default function Comppembayaran({
               <small className="text-secondary">Opsional</small>
             </p>
             <div>
+              <i
+                className={
+                  valbola == ""
+                    ? "d-none"
+                    : "fas fa-circle-check text-primary mx-3"
+                }
+              ></i>
               <i
                 className={bola ? "fas fa-angle-down" : "fas fa-angle-right"}
               ></i>
@@ -346,6 +383,19 @@ export default function Comppembayaran({
                 </div>
               );
             })}
+            <div className="d-flex justify-content-between">
+              <p>Bola MMS</p>
+              <p>
+                +{formatrupiah(0)}{" "}
+                <input
+                  className="form-check-input border-primary"
+                  type="radio"
+                  name="bola"
+                  id="bola"
+                  onClick={() => handlebola(0)}
+                ></input>
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -366,6 +416,13 @@ export default function Comppembayaran({
               <small className="text-secondary">Opsional</small>
             </p>
             <div>
+              <i
+                className={
+                  valrompi == ""
+                    ? "d-none"
+                    : "fas fa-circle-check text-primary mx-3"
+                }
+              ></i>
               <i
                 className={rompi ? "fas fa-angle-down" : "fas fa-angle-right"}
               ></i>
@@ -394,6 +451,19 @@ export default function Comppembayaran({
                 </div>
               );
             })}
+            <div className="d-flex justify-content-between">
+              <p>Tanpa rompi</p>
+              <p>
+                +{formatrupiah(0)}{" "}
+                <input
+                  className="form-check-input border-primary"
+                  type="radio"
+                  name="rompi"
+                  id="rompi"
+                  onClick={() => handlerompi(0)}
+                ></input>
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -416,6 +486,13 @@ export default function Comppembayaran({
             </p>
             <div>
               <i
+                className={
+                  valpoto == ""
+                    ? "d-none"
+                    : "fas fa-circle-check text-primary mx-3"
+                }
+              ></i>
+              <i
                 className={poto ? "fas fa-angle-down" : "fas fa-angle-right"}
               ></i>
             </div>
@@ -423,36 +500,38 @@ export default function Comppembayaran({
 
           <div className={poto ? "" : "d-none"}>
             <hr />
-            {tgl_sekarang == tglbooking ? (
-              <>
-                {" "}
-                <p className="text-danger text-center">
-                  Fitur ini tidak dapat dipilih, minimal H-1 sebelum tanggal
-                  reservasi
-                </p>
-              </>
-            ) : (
-              <>
-                {datapoto.map((pt, index) => {
-                  return (
-                    <div className="d-flex justify-content-between" key={index}>
-                      <p>{pt.nama}</p>
-                      <p>
-                        +{formatrupiah(pt.harga)}{" "}
-                        <input
-                          className="form-check-input border-primary"
-                          type="radio"
-                          name="poto"
-                          id="poto"
-                          value={pt.id}
-                          onClick={() => handlepoto(pt.harga, pt.id)}
-                        ></input>
-                      </p>
-                    </div>
-                  );
-                })}
-              </>
-            )}
+
+            {datapoto.map((pt, index) => {
+              return (
+                <div className="d-flex justify-content-between" key={index}>
+                  <p>{pt.nama}</p>
+                  <p>
+                    +{formatrupiah(pt.harga)}{" "}
+                    <input
+                      className="form-check-input border-primary"
+                      type="radio"
+                      name="poto"
+                      id="poto"
+                      value={pt.id}
+                      onClick={() => handlepoto(pt.harga, pt.id)}
+                    ></input>
+                  </p>
+                </div>
+              );
+            })}
+            <div className="d-flex justify-content-between">
+              <p>Tanpa Fotograper</p>
+              <p>
+                +{formatrupiah(0)}{" "}
+                <input
+                  className="form-check-input border-primary"
+                  type="radio"
+                  name="poto"
+                  id="poto"
+                  onClick={() => handlepoto(0)}
+                ></input>
+              </p>
+            </div>
           </div>
         </div>
       </div>
