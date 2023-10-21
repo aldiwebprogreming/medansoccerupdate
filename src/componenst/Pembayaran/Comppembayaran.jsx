@@ -260,6 +260,9 @@ export default function Comppembayaran({
                 <i className="far fa-clock"></i> {jammulai + "-" + jamberakhir}
               </p>
             </div>
+            <span className="badge text-bg-dark fw-bold">
+              {totalharga == "" ? "Rp.0" : formatrupiah(totalharga)}
+            </span>{" "}
           </div>
         </div>
       </div>
