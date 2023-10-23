@@ -631,10 +631,10 @@ export default function Comppembayaran({
         </div>
       </div>
       <div className="container my-5">
-        <div class="fixed-bottom mt-5">
+        <div className="fixed-bottom mt-5">
           <div className="card" style={{ borderRadius: "0px", border: "0" }}>
             <div className="card-boyd">
-              <div class="d-flex justify-content-around my-3">
+              <div className="d-flex justify-content-around my-3">
                 <div>
                   {totalharga == false ? (
                     <p className="fw-bold mt-1">
@@ -671,14 +671,23 @@ export default function Comppembayaran({
                         className="text-center"
                         style={{ marginTop: "130px" }}
                       >
-                        <div class="spinner-grow text-primary" role="status">
-                          <span class="visually-hidden">Loading...</span>
+                        <div
+                          className="spinner-grow text-primary"
+                          role="status"
+                        >
+                          <span className="visually-hidden">Loading...</span>
                         </div>
-                        <div class="spinner-grow text-secondary" role="status">
-                          <span class="visually-hidden">Loading...</span>
+                        <div
+                          className="spinner-grow text-secondary"
+                          role="status"
+                        >
+                          <span className="visually-hidden">Loading...</span>
                         </div>
-                        <div class="spinner-grow text-success" role="status">
-                          <span class="visually-hidden">Loading...</span>
+                        <div
+                          className="spinner-grow text-success"
+                          role="status"
+                        >
+                          <span className="visually-hidden">Loading...</span>
                         </div>
                         <br></br>
                         <label>Loading....</label>
@@ -721,7 +730,7 @@ export default function Comppembayaran({
                     <div className={form ? "container" : "d-none"}>
                       <div class="form-check form-check-inline">
                         <input
-                          class="form-check-input border-primary"
+                          className="form-check-input border-primary"
                           type="radio"
                           name="inlineRadioOptions"
                           onClick={() => handlebagi("lunas")}
@@ -729,26 +738,26 @@ export default function Comppembayaran({
                           value="Lunas"
                         />
 
-                        <label class="form-check-label" for="inlineRadio1">
+                        <label className="form-check-label" for="inlineRadio1">
                           Lunas
                         </label>
                       </div>
-                      <div class="form-check form-check-inline">
+                      <div className="form-check form-check-inline">
                         <input
-                          class="form-check-input border-primary"
+                          className="form-check-input border-primary"
                           type="radio"
                           name="inlineRadioOptions"
                           onClick={() => handlebagi("dp")}
                           id="dp"
                           value="DP"
                         />
-                        <label class="form-check-label" for="inlineRadio2">
+                        <label className="form-check-label" for="inlineRadio2">
                           DP 50%
                         </label>
                       </div>
                       <div className="row">
-                        <div class="row">
-                          <div class="form-group col-md-6 mt-3">
+                        <div className="row">
+                          <div className="form-group col-md-6 mt-3">
                             <input
                               type="text"
                               className="form-control"
@@ -759,7 +768,7 @@ export default function Comppembayaran({
                               }
                             ></input>
                           </div>
-                          <div class="form-group col-md-6 mt-3">
+                          <div className="form-group col-md-6 mt-3">
                             <select
                               className="form-control"
                               onChange={(e) => setBank(e.target.value)}
@@ -768,7 +777,7 @@ export default function Comppembayaran({
                                 -- Pilih Bank Anda --
                               </option>
                               <option>BRI</option>
-                              <optin>BCA</optin>
+                              <option>BCA</option>
                               <option>BNI</option>
                               <option>BSI</option>
                               <option>Mandiri</option>
@@ -778,39 +787,39 @@ export default function Comppembayaran({
                               <option>Lainya</option>
                             </select>
                           </div>
-                          <div class="form-group col-md-6 mt-3">
+                          <div className="form-group col-md-6 mt-3">
                             <input
                               type="text"
-                              class="form-control"
+                              className="form-control"
                               id="inputEmail4"
                               onChange={(e) => setAtasnama(e.target.value)}
                               placeholder="Atas nama"
                             />
                           </div>
 
-                          <div class="form-group col-md-6 mt-3">
+                          <div className="form-group col-md-6 mt-3">
                             <input
                               type="number"
-                              class="form-control"
+                              className="form-control"
                               id="inputEmail4"
                               onChange={(e) => setWa(e.target.value)}
                               placeholder="Nomor whatsapp"
                             />
                           </div>
-                          <div class="form-group col-md-6 mt-3">
+                          <div className="form-group col-md-6 mt-3">
                             <input
                               type="text"
-                              class="form-control"
+                              className="form-control"
                               id=""
                               onChange={(e) => setTeam(e.target.value)}
                               placeholder="Nama team"
                             />
                           </div>
-                          <div class="form-group col-md-6 mt-3">
+                          <div className="form-group col-md-6 mt-3">
                             <input
                               type="file"
                               onChange={(e) => handleChangeImg(e)}
-                              class="form-control"
+                              className="form-control"
                               id="inputEmail4"
                             />
                             <small>
@@ -818,7 +827,7 @@ export default function Comppembayaran({
                               (JPG, JPEG & PNG)
                             </small>
                           </div>
-                          <div class="form-group col-md-6 mt-3">
+                          <div className="form-group col-md-6 mt-3">
                             <textarea
                               className="form-control"
                               name="keterangan"

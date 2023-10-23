@@ -62,7 +62,7 @@ export default function Compregister() {
 
         // menjalakan aksi send email
         setSukses(true);
-        // sendEmail();
+        sendEmail();
       })
 
       .catch((error) => {
@@ -106,7 +106,6 @@ export default function Compregister() {
               <p className="text-center text-white mt-3">
                 Masukan data anda dengan benar
               </p>
-
               <input type="hidden" name="kode" value={kode}></input>
               <div className="form-group">
                 <label class="form-label fw-bold text-white">Nama</label>
@@ -135,7 +134,7 @@ export default function Compregister() {
                   Email sudah terdaftar
                 </small>
               </div>
-
+              sxsxsxsxsxsxsxsxxsssxs
               <div className="form-group mt-4">
                 <label class="form-label fw-bold text-white">No Hp</label>
                 <input
@@ -147,7 +146,6 @@ export default function Compregister() {
                   value={nohp}
                 ></input>
               </div>
-
               <div className="form-group mt-4">
                 <label class="form-label fw-bold text-white">Password</label>
                 <input
@@ -159,7 +157,6 @@ export default function Compregister() {
                   value={pass}
                 ></input>
               </div>
-
               <div className="form-group mt-4">
                 <label class="form-label fw-bold text-white">
                   Ulangi Password
@@ -176,7 +173,6 @@ export default function Compregister() {
               <p className={`text-danger ${alertpass ? "" : "d-none"}`}>
                 Password belum sama
               </p>
-
               {nama == "" ||
               email == "" ||
               nohp == "" ||
@@ -205,7 +201,6 @@ export default function Compregister() {
                   </button>
                 </>
               )}
-
               <hr />
               <p className="text-primary mt-4 text-center">
                 Sudah punya akun ? <Link to="/login">Login sekarang</Link>
