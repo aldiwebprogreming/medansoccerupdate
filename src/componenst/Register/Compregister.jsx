@@ -62,7 +62,7 @@ export default function Compregister() {
 
         // menjalakan aksi send email
         setSukses(true);
-        sendEmail();
+        // sendEmail();
       })
 
       .catch((error) => {

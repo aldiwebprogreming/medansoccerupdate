@@ -18,15 +18,18 @@ export default function Comppembayaran({
   const [bola, setBola] = useState(false);
   const [rompi, setRompi] = useState(false);
   const [poto, setPoto] = useState(false);
+  const [video, setVideo] = useState(false);
   const [booking, setBooking] = useState(true);
   const [datawasit, setDatawasit] = useState([]);
   const [databola, setDatabola] = useState([]);
   const [datarompi, setDatarompi] = useState([]);
   const [datapoto, setDatapoto] = useState([]);
+  const [datavideo, setDatavideo] = useState([]);
   const [hargawasit, setHargawasit] = useState(0);
   const [hargabola, setHargabola] = useState(0);
   const [hargarompi, setHargarompi] = useState(0);
   const [hargapoto, setHargapoto] = useState(0);
+  const [hargavideo, setHargavideo] = useState(0);
   const [bagiharga, setBagiharga] = useState("lunas");
 
   const [nameImg, setNameImg] = useState("");
@@ -51,6 +54,7 @@ export default function Comppembayaran({
   const [valrompi, setValrompi] = useState("");
   const [valbola, setValbola] = useState("");
   const [valpoto, setValpoto] = useState("");
+  const [valvideo, setValvideo] = useState("");
 
   const handleChangeImg = (e) => {
     setImg(e.target.files[0]);
@@ -99,6 +103,7 @@ export default function Comppembayaran({
         bola: valbola,
         rompi: valrompi,
         poto: valpoto,
+        video: valvideo,
       })
 
       .then((response) => {
@@ -151,12 +156,23 @@ export default function Comppembayaran({
     }
   };
 
+  const handlevideo = (harga, id) => {
+    if (harga == 0) {
+      setHargavideo(harga);
+      setValvideo("");
+    } else {
+      setHargavideo(harga);
+      setValvideo(id);
+    }
+  };
+
   const totalhargasemua =
     parseInt(totalharga) +
     parseInt(hargawasit) +
     parseInt(hargabola) +
     parseInt(hargarompi) +
-    parseInt(hargapoto);
+    parseInt(hargapoto) +
+    parseInt(hargavideo);
 
   const formatrupiah = (numb) => {
     const format = numb.toString().split("").reverse().join("");
@@ -203,11 +219,19 @@ export default function Comppembayaran({
     } catch (error) {}
   };
 
+  const getvideo = async () => {
+    try {
+      const response = await axios.get(urlapi + "Video");
+      setDatavideo(response.data);
+    } catch (error) {}
+  };
+
   useEffect(() => {
     getwasit();
     getbola();
     getrompi();
     getpoto();
+    getvideo();
   }, []);
 
   return (
@@ -473,7 +497,7 @@ export default function Comppembayaran({
 
       <div
         className="card shadow"
-        style={{ border: "none", marginTop: "15px", marginBottom: "100px" }}
+        style={{ border: "none", marginTop: "15px" }}
       >
         <div className="card-body">
           <h5> </h5>
@@ -532,6 +556,74 @@ export default function Comppembayaran({
                   name="poto"
                   id="poto"
                   onClick={() => handlepoto(0)}
+                ></input>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        className="card shadow"
+        style={{ border: "none", marginTop: "15px", marginBottom: "100px" }}
+      >
+        <div className="card-body">
+          <h5> </h5>
+          <div
+            onClick={() => setVideo(!video)}
+            className="d-flex justify-content-between"
+            style={{ cursor: "pointer" }}
+          >
+            <p className="fw-bold">
+              Videograper
+              <br />
+              <small className="text-secondary">Opsional</small>
+            </p>
+            <div>
+              <i
+                className={
+                  valvideo == ""
+                    ? "d-none"
+                    : "fas fa-circle-check text-primary mx-3"
+                }
+              ></i>
+              <i
+                className={video ? "fas fa-angle-down" : "fas fa-angle-right"}
+              ></i>
+            </div>
+          </div>
+
+          <div className={video ? "" : "d-none"}>
+            <hr />
+
+            {datavideo.map((vd, index) => {
+              return (
+                <div className="d-flex justify-content-between" key={index}>
+                  <p>{vd.nama}</p>
+                  <p>
+                    +{formatrupiah(vd.harga)}{" "}
+                    <input
+                      className="form-check-input border-primary"
+                      type="radio"
+                      name="poto"
+                      id="poto"
+                      value={vd.id}
+                      onClick={() => handlevideo(vd.harga, vd.id)}
+                    ></input>
+                  </p>
+                </div>
+              );
+            })}
+            <div className="d-flex justify-content-between">
+              <p>Tanpa Videograper</p>
+              <p>
+                +{formatrupiah(0)}{" "}
+                <input
+                  className="form-check-input border-primary"
+                  type="radio"
+                  name="poto"
+                  id="poto"
+                  onClick={() => handlevideo(0)}
                 ></input>
               </p>
             </div>
