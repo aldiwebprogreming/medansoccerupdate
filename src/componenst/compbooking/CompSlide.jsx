@@ -3,8 +3,7 @@ import OwlCarousel from "react-owl-carousel";
 import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
 
-export default function CompSlide({ gambar }) {
-
+export default function CompSlide({ gambar, slide1, slide2 }) {
   const resvonsive = {
     0: {
       items: 1,
@@ -19,7 +18,6 @@ export default function CompSlide({ gambar }) {
 
   return (
     <div>
-
       <div className="container mb-3">
         <div className="compslide" style={{ border: "none" }}>
           <OwlCarousel
@@ -31,40 +29,45 @@ export default function CompSlide({ gambar }) {
             dotsEach
             autoplay
           >
-            <div className="card item" style={{
-              height: '200px', backgroundImage: `url(${gambar})`,
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "cover",
-            }}>
-              <div className="card-body" >
-
-              </div>
+            <div
+              className="card item"
+              style={{
+                height: "200px",
+                backgroundImage: `url(${gambar})`,
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
+              }}
+            >
+              <div className="card-body"></div>
             </div>
-            <div className="card item" style={{
-              height: '200px', backgroundImage: `url('/img/lap2.jpeg')`,
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "cover",
-            }}>
-              <div className="card-body" >
-
-              </div>
+            <div
+              className="card item"
+              style={{
+                height: "200px",
+                backgroundImage: `url(${slide1})`,
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
+              }}
+            >
+              <div className="card-body"></div>
             </div>
 
-            <div className="card item" style={{
-              height: '200px', backgroundImage: `url('/img/lap3.jpeg')`,
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "cover",
-            }}>
-              <div className="card-body" >
-
-              </div>
+            <div
+              className="card item"
+              style={{
+                height: "200px",
+                backgroundImage: `url(${slide2})`,
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
+              }}
+            >
+              <div className="card-body"></div>
             </div>
           </OwlCarousel>
         </div>
-
       </div>
       {/* <div className="container">
         <div

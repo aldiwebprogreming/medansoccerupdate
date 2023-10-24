@@ -37,7 +37,6 @@ export default function Home() {
     <div>
       <Navbar judul="Medanminisoccer" aicon="false" />
       <Header />
-
       <CardMenu />
 
       <div className="" style={{ position: "relative", bottom: "70px" }}>
