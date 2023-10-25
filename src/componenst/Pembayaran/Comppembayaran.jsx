@@ -773,7 +773,7 @@ export default function Comppembayaran({
                               className="form-control"
                               onChange={(e) => setBank(e.target.value)}
                             >
-                              <option value="Lainya">
+                              <option value="Laid4enya">
                                 -- Pilih Bank Anda --
                               </option>
                               <option>BRI</option>

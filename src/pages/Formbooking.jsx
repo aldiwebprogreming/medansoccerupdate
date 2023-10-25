@@ -549,7 +549,7 @@ export default function Formbooking() {
                         onClick={alertJamkosong}
                         style={{ backgroundColor: "#2b2e5a", color: "white" }}
                       >
-                        Selanjutnya
+                        Selanjutnya 
                       </Link>
                     ) : (
                       <Link
