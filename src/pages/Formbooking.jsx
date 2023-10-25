@@ -212,7 +212,9 @@ export default function Formbooking() {
 
   const getJammain = async (tgl) => {
     try {
-      const response = await axios.get(urlapi + "Jammain?tgl=" + tgl);
+      const response = await axios.get(
+        urlapi + "Jammain?tgl=" + tgl + "&&lapangan=" + idlapangan
+      );
       setJammain(response.data);
       setLoad(true);
       // console.log(response.data);
